@@ -6,6 +6,7 @@
 package mergeandsort;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Random;
 
 /**
@@ -37,8 +38,19 @@ public class MergeAndSort {
         }
     }
 
-    private static void sortBubles(int[] array) {
+    private static long sortMegreJava(int[] array) {
+        long startTime = System.nanoTime();
+        long stopTime;
+        Arrays.sort(array);
+        stopTime = System.nanoTime();
+        return stopTime - startTime;
+    }
+
+    private static long sortBubles(int[] array) {
         int size = array.length;
+        Calendar cal = Calendar.getInstance();
+        long stopTime;
+        long startTime = System.nanoTime();
 
         for (int i = 0; i < size - 1; i++) {
             for (int j = 0; j < size - 1; j++) {
@@ -49,6 +61,8 @@ public class MergeAndSort {
                 }
             }
         }
+        stopTime = System.nanoTime();
+        return stopTime - startTime;
     }
     //  |
     // [5,4,7,1,8,2]
@@ -65,11 +79,12 @@ public class MergeAndSort {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int[] a = createMatrix(5);
-        int[] b = createMatrix(10);
-        System.out.println(Arrays.toString(a));
-        sortBubles(a);
-        System.out.println(Arrays.toString(a));
+        int[] a = createMatrix(10000);
+        int[] b = Arrays.copyOf(a, 10000);
+        //System.out.println(Arrays.toString(a));
+        System.out.println("Bubles sort takes: " + sortBubles(a));
+        System.out.println("Java core sort takes: " + sortMegreJava(b));
+        //System.out.println(Arrays.toString(a));
 
     }
 
