@@ -29,15 +29,26 @@ public class MergeAndSort {
     private static void sortInsertion(int[] array) {
         int size = array.length;
 
-        for (int i = 1; i < size; i++) {
-            int temp = array[i];
-            if (array[i] > array[i - 1]) {
-                array[i] = array[i - 1];
-                array[i - 1] = temp;
+        for (int i = 0; i < size; i++) {
+            if (array[i] > array[i + 1]) {
+                int temp = array[i + 1];
+                int insertPosition = Arrays.binarySearch(Arrays.copyOfRange(array, 0, i), temp);
+
             }
         }
     }
 
+    // 7 5 6 9 1 0
+    //   |
+    // 5 7 6 9 1 0
+    //     |
+    // 5 6 7 9 1 0
+    //       |
+    // 5 6 7 9 1 0
+    //         |
+    // 1 5 6 7 9 0
+    //           |
+    // 0 1 5 6 7 9
     private static long sortMegreJava(int[] array) {
         long startTime = System.nanoTime();
         long stopTime;
