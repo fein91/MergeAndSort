@@ -26,16 +26,22 @@ public class MergeAndSort {
         return result;
     }
 
-    private static void sortInsertion(int[] array) {
+    private static long sortInsertion(int[] array) {
         int size = array.length;
-
+        long timeStart = System.nanoTime();
+        long timeStop;
         for (int i = 0; i < size; i++) {
             if (array[i] > array[i + 1]) {
                 int temp = array[i + 1];
-                int insertPosition = Arrays.binarySearch(Arrays.copyOfRange(array, 0, i), temp);
-
+                int border = i;
+                while (border != 0 && temp < array[border]) {
+                    array[border + 1] = array[border];
+                    border--;
+                }
             }
         }
+        timeStop = System.nanoTime();
+        return timeStop - timeStart;
     }
 
     // 7 5 6 9 1 0
@@ -90,13 +96,14 @@ public class MergeAndSort {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int[] a = createMatrix(10000);
-        int[] b = Arrays.copyOf(a, 10000);
+        int[] a = createMatrix(6);
+        int[] b = Arrays.copyOf(a, 6);
+        int[] c = Arrays.copyOf(a, 6);
         //System.out.println(Arrays.toString(a));
         System.out.println("Bubles sort takes: " + sortBubles(a));
         System.out.println("Java core sort takes: " + sortMegreJava(b));
+        System.out.println("Insertion sort takes: " + sortInsertion(b));
         //System.out.println(Arrays.toString(a));
 
     }
-
 }
