@@ -15,7 +15,13 @@ import java.util.Random;
  */
 public class MergeAndSort {
 
+    private enum SortionType {
+
+        INSERTION, BUBLES, JAVA;
+    }
+
     private final static int MAX_INT = 10000;
+    private final static int ARRAY_SIZE = 1000;
 
     private static int[] createMatrix(int size) {
         Random rnd = new Random();
@@ -26,22 +32,28 @@ public class MergeAndSort {
         return result;
     }
 
-    private static long sortInsertion(int[] array) {
+    private static void sortInsertion(int[] array) {
         int size = array.length;
-        long timeStart = System.nanoTime();
-        long timeStop;
-        for (int i = 0; i < size; i++) {
-            if (array[i] > array[i + 1]) {
-                int temp = array[i + 1];
+        for (int i = 1; i < size; i++) {
+            if (array[i - 1] > array[i]) {
+                int temp = array[i];
                 int border = i;
-                while (border != 0 && temp < array[border]) {
-                    array[border + 1] = array[border];
+//                int[] sorted = Arrays.copyOf(array, i);
+//                int insertPos = Arrays.binarySearch(sorted, temp);
+//
+//                if (insertPos >= 0) {
+//                } else {
+//                    sorted = Arrays.copyOf(sorted, i+1);
+//                    sorted[-1-insertPos] = temp;
+//                }
+
+                while (border != 0 && array[border] < array[border - 1]) {
+                    array[border] = array[border - 1];
+                    array[border - 1] = temp;
                     border--;
                 }
             }
         }
-        timeStop = System.nanoTime();
-        return timeStop - timeStart;
     }
 
     // 7 5 6 9 1 0
@@ -55,20 +67,12 @@ public class MergeAndSort {
     // 1 5 6 7 9 0
     //           |
     // 0 1 5 6 7 9
-    private static long sortMegreJava(int[] array) {
-        long startTime = System.nanoTime();
-        long stopTime;
+    private static void sortJava(int[] array) {
         Arrays.sort(array);
-        stopTime = System.nanoTime();
-        return stopTime - startTime;
     }
 
-    private static long sortBubles(int[] array) {
+    private static void sortBubles(int[] array) {
         int size = array.length;
-        Calendar cal = Calendar.getInstance();
-        long stopTime;
-        long startTime = System.nanoTime();
-
         for (int i = 0; i < size - 1; i++) {
             for (int j = 0; j < size - 1; j++) {
                 if (array[j] > array[j + 1]) {
@@ -78,8 +82,28 @@ public class MergeAndSort {
                 }
             }
         }
+    }
+
+    private static long processSort(SortionType sortType, int[] array) {
+        long stopTime = 0;
+        long result = 0;
+        long startTime = System.nanoTime();
+
+        switch (sortType) {
+            case INSERTION:
+                sortInsertion(array);
+                break;
+            case BUBLES:
+                sortBubles(array);
+                break;
+            case JAVA:
+                sortJava(array);
+                break;
+        }
+
         stopTime = System.nanoTime();
-        return stopTime - startTime;
+        result = stopTime - startTime;
+        return result;
     }
     //  |
     // [5,4,7,1,8,2]
@@ -96,13 +120,13 @@ public class MergeAndSort {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int[] a = createMatrix(6);
-        int[] b = Arrays.copyOf(a, 6);
-        int[] c = Arrays.copyOf(a, 6);
+        int[] a = createMatrix(ARRAY_SIZE);
+        int[] b = Arrays.copyOf(a, ARRAY_SIZE);
+        int[] c = Arrays.copyOf(a, ARRAY_SIZE);
         //System.out.println(Arrays.toString(a));
-        System.out.println("Bubles sort takes: " + sortBubles(a));
-        System.out.println("Java core sort takes: " + sortMegreJava(b));
-        System.out.println("Insertion sort takes: " + sortInsertion(b));
+        System.out.println("Bubles sort takes: " + processSort(SortionType.BUBLES, a)/1000+"ms");
+        System.out.println("Java core sort takes: " + processSort(SortionType.JAVA, b)/1000+"ms");
+        System.out.println("Insertion sort takes: " + processSort(SortionType.INSERTION, c)/1000+"ms");
         //System.out.println(Arrays.toString(a));
 
     }
