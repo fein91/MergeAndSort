@@ -56,17 +56,6 @@ public class MergeAndSort {
         }
     }
 
-    // 7 5 6 9 1 0
-    //   |
-    // 5 7 6 9 1 0
-    //     |
-    // 5 6 7 9 1 0
-    //       |
-    // 5 6 7 9 1 0
-    //         |
-    // 1 5 6 7 9 0
-    //           |
-    // 0 1 5 6 7 9
     private static void sortJava(int[] array) {
         Arrays.sort(array);
     }
@@ -105,29 +94,69 @@ public class MergeAndSort {
         result = stopTime - startTime;
         return result;
     }
-    //  |
-    // [5,4,7,1,8,2]
-    //    |
-    // [4,5,7,1,8,2]
-    //      |
-    // [4,5,7,1,8,2]
-    //        |
-    // [4,5,1,7,8,2]
-    //          |
-    // [4,5,1,7,2,8]
+
+    private static int[] megreSorted(int[] left, int[] right) {
+        int[] result = new int[left.length + right.length];
+        int k = 0;
+        int i = 0;
+        int j = 0;
+
+        while (true) {
+//            if (left.length == i) {
+//                result[k] = right[j];
+//                break;
+//            } else if (right.length == j) {
+//                result[k] = left[i];
+//                break;
+//            }
+            if (left.length == i && right.length == j) {
+                break;
+            } else if (left.length == i) {
+                i--;
+            } else if (right.length == j) {
+                j--;
+            } else {
+                if (left[i] > right[j]) {
+                    result[k] = right[j];
+                    j++;
+                } else {
+                    result[k] = left[i];
+                    i++;
+                }
+            }
+            k++;
+
+        }
+
+        return result;
+    }
+
+    private static void testSortions() {
+        int[] a = createMatrix(ARRAY_SIZE);
+        int[] b = Arrays.copyOf(a, ARRAY_SIZE);
+        int[] c = Arrays.copyOf(a, ARRAY_SIZE);
+        System.out.println(Arrays.toString(a));
+        System.out.println("Bubles sort takes: " + processSort(SortionType.BUBLES, a) / 1000 + "ms");
+        System.out.println("Java core sort takes: " + processSort(SortionType.JAVA, b) / 1000 + "ms");
+        System.out.println("Insertion sort takes: " + processSort(SortionType.INSERTION, c) / 1000 + "ms");
+        System.out.println(Arrays.toString(a));
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int[] a = createMatrix(ARRAY_SIZE);
-        int[] b = Arrays.copyOf(a, ARRAY_SIZE);
-        int[] c = Arrays.copyOf(a, ARRAY_SIZE);
-        //System.out.println(Arrays.toString(a));
-        System.out.println("Bubles sort takes: " + processSort(SortionType.BUBLES, a)/1000+"ms");
-        System.out.println("Java core sort takes: " + processSort(SortionType.JAVA, b)/1000+"ms");
-        System.out.println("Insertion sort takes: " + processSort(SortionType.INSERTION, c)/1000+"ms");
-        //System.out.println(Arrays.toString(a));
+        //testSortions();
+        int[] left = createMatrix(2);
+        int[] right = createMatrix(3);
 
+        processSort(MergeAndSort.SortionType.INSERTION, right);
+        processSort(MergeAndSort.SortionType.INSERTION, left);
+
+        System.out.println(Arrays.toString(left));
+        System.out.println(Arrays.toString(right));
+
+        int[] sorted = megreSorted(left, right);
+        System.out.println(Arrays.toString(sorted));
     }
 }
