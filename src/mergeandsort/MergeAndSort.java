@@ -19,9 +19,8 @@ public class MergeAndSort {
 
         INSERTION, BUBLES, JAVA, MERGE;
     }
-
     private final static int MAX_INT = 10000;
-    private final static int ARRAY_SIZE = 1000;
+    private final static int ARRAY_SIZE = 100000;
     private final static int ARRAY_LEFT_SIZE = 5;
     private final static int ARRAY_RIGHT_SIZE = 10;
 
@@ -76,20 +75,20 @@ public class MergeAndSort {
     }
 
     private static int[] sortMerge(int[] array, int from, int to) {
-        int size = array.length;
-        int[] result = new int[size];
+        int[] result = Arrays.copyOfRange(array, from, to);
+        int size = result.length;
 
         if (size == 1) {
-            result = array;
+            return result;
         } else if (size == 2) {
-            if (array[0] > array[1]) {
-                int temp = array[0];
-                array[0] = array[1];
-                array[1] = temp;
+            if (result[0] > result[1]) {
+                int temp = result[0];
+                result[0] = result[1];
+                result[1] = temp;
             }
-            result = array;
+            return result;
         } else {
-            result = megreSorted(sortMerge(array, 0, size / 2), sortMerge(array, size - size / 2, size));
+            result = megreSorted(sortMerge(result, 0, size / 2), sortMerge(result, size - 1 - size / 2, size));
         }
         return result;
     }
@@ -110,7 +109,7 @@ public class MergeAndSort {
                 sortJava(array);
                 break;
             case MERGE:
-                sortMerge(array, 0, array.length);
+                System.out.println(Arrays.toString(sortMerge(array, 0, array.length)));
                 break;
         }
 
@@ -156,7 +155,10 @@ public class MergeAndSort {
         System.out.println("Java core sort takes: " + processSort(SortionType.JAVA, b) / 1000 + "ms");
         System.out.println("Insertion sort takes: " + processSort(SortionType.INSERTION, c) / 1000 + "ms");
         System.out.println("Merge sort takes: " + processSort(SortionType.MERGE, d) / 1000 + "ms");
+        
         System.out.println(Arrays.toString(a));
+        System.out.println(Arrays.toString(b));
+        System.out.println(Arrays.toString(c));
     }
 
     private static void testMerge() {
