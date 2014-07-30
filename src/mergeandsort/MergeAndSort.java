@@ -22,6 +22,8 @@ public class MergeAndSort {
 
     private final static int MAX_INT = 10000;
     private final static int ARRAY_SIZE = 1000;
+    private final static int ARRAY_LEFT_SIZE = 5;
+    private final static int ARRAY_RIGHT_SIZE = 10;
 
     private static int[] createMatrix(int size) {
         Random rnd = new Random();
@@ -102,19 +104,12 @@ public class MergeAndSort {
         int j = 0;
 
         while (true) {
-//            if (left.length == i) {
-//                result[k] = right[j];
-//                break;
-//            } else if (right.length == j) {
-//                result[k] = left[i];
-//                break;
-//            }
-            if (left.length == i && right.length == j) {
+            if (left.length == i) {
+                System.arraycopy(right, j, result, k, right.length - j);
                 break;
-            } else if (left.length == i) {
-                i--;
             } else if (right.length == j) {
-                j--;
+                System.arraycopy(left, i, result, k, left.length - i);
+                break;
             } else {
                 if (left[i] > right[j]) {
                     result[k] = right[j];
@@ -125,9 +120,7 @@ public class MergeAndSort {
                 }
             }
             k++;
-
         }
-
         return result;
     }
 
@@ -142,21 +135,26 @@ public class MergeAndSort {
         System.out.println(Arrays.toString(a));
     }
 
+    private static void testMerge() {
+        int[] left = createMatrix(ARRAY_LEFT_SIZE);
+        int[] right = createMatrix(ARRAY_RIGHT_SIZE);
+
+        processSort(MergeAndSort.SortionType.INSERTION, right);
+        processSort(MergeAndSort.SortionType.INSERTION, left);
+
+        System.out.println("Left: "+Arrays.toString(left));
+        System.out.println("Right: "+Arrays.toString(right));
+
+        int[] sorted = megreSorted(left, right);
+        System.out.println("Result: "+Arrays.toString(sorted));
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         //testSortions();
-        int[] left = createMatrix(2);
-        int[] right = createMatrix(3);
+        //testMerge();
 
-        processSort(MergeAndSort.SortionType.INSERTION, right);
-        processSort(MergeAndSort.SortionType.INSERTION, left);
-
-        System.out.println(Arrays.toString(left));
-        System.out.println(Arrays.toString(right));
-
-        int[] sorted = megreSorted(left, right);
-        System.out.println(Arrays.toString(sorted));
     }
 }
