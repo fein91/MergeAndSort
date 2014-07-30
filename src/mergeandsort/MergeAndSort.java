@@ -17,7 +17,7 @@ public class MergeAndSort {
 
     private enum SortionType {
 
-        INSERTION, BUBLES, JAVA;
+        INSERTION, BUBLES, JAVA, MERGE;
     }
 
     private final static int MAX_INT = 10000;
@@ -75,6 +75,25 @@ public class MergeAndSort {
         }
     }
 
+    private static int[] sortMerge(int[] array, int from, int to) {
+        int size = array.length;
+        int[] result = new int[size];
+
+        if (size == 1) {
+            result = array;
+        } else if (size == 2) {
+            if (array[0] > array[1]) {
+                int temp = array[0];
+                array[0] = array[1];
+                array[1] = temp;
+            }
+            result = array;
+        } else {
+            result = megreSorted(sortMerge(array, 0, size / 2), sortMerge(array, size - size / 2, size));
+        }
+        return result;
+    }
+
     private static long processSort(SortionType sortType, int[] array) {
         long stopTime = 0;
         long result = 0;
@@ -89,6 +108,9 @@ public class MergeAndSort {
                 break;
             case JAVA:
                 sortJava(array);
+                break;
+            case MERGE:
+                sortMerge(array, 0, array.length);
                 break;
         }
 
@@ -128,10 +150,12 @@ public class MergeAndSort {
         int[] a = createMatrix(ARRAY_SIZE);
         int[] b = Arrays.copyOf(a, ARRAY_SIZE);
         int[] c = Arrays.copyOf(a, ARRAY_SIZE);
+        int[] d = Arrays.copyOf(a, ARRAY_SIZE);
         System.out.println(Arrays.toString(a));
         System.out.println("Bubles sort takes: " + processSort(SortionType.BUBLES, a) / 1000 + "ms");
         System.out.println("Java core sort takes: " + processSort(SortionType.JAVA, b) / 1000 + "ms");
         System.out.println("Insertion sort takes: " + processSort(SortionType.INSERTION, c) / 1000 + "ms");
+        System.out.println("Merge sort takes: " + processSort(SortionType.MERGE, d) / 1000 + "ms");
         System.out.println(Arrays.toString(a));
     }
 
@@ -142,18 +166,18 @@ public class MergeAndSort {
         processSort(MergeAndSort.SortionType.INSERTION, right);
         processSort(MergeAndSort.SortionType.INSERTION, left);
 
-        System.out.println("Left: "+Arrays.toString(left));
-        System.out.println("Right: "+Arrays.toString(right));
+        System.out.println("Left: " + Arrays.toString(left));
+        System.out.println("Right: " + Arrays.toString(right));
 
         int[] sorted = megreSorted(left, right);
-        System.out.println("Result: "+Arrays.toString(sorted));
+        System.out.println("Result: " + Arrays.toString(sorted));
     }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //testSortions();
+        testSortions();
         //testMerge();
 
     }
